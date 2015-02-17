@@ -29,6 +29,7 @@ import (
 	"fmt"
 	"io"
 	"math/big"
+	"strconv"
 	"strings"
 )
 
@@ -454,6 +455,20 @@ func (x *Dec) String() string {
 	ss = append(ss, '.')
 	ss = append(ss, s[lens-scale:]...)
 	return string(ss)
+}
+
+func (x *Dec) DecString() string {
+	i := x.UnscaledBig().Int64()
+	if x.scale == 0 {
+		return strconv.Itoa(int(i))
+	}
+	scaleDiv := int64(10)
+	for i := 1; i < int(x.scale); i++ {
+		scaleDiv *= 10
+	}
+	whole := strconv.Itoa(int(i / scaleDiv))
+	dec := strconv.Itoa(int(i % scaleDiv))
+	return whole + "." + dec
 }
 
 // Format is a support routine for fmt.Formatter. It accepts the decimal
