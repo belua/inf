@@ -613,3 +613,17 @@ func (z *Dec) UnmarshalText(data []byte) error {
 	}
 	return nil
 }
+
+// MarshalJSON implements the json.Marshaler interface.
+func (x *Dec) MarshalJSON() ([]byte, error) {
+	return []byte(x.String()), nil
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (z *Dec) UnmarshalJSON(data []byte) error {
+	_, ok := z.SetString(string(data))
+	if !ok {
+		return fmt.Errorf("invalid inf.Dec")
+	}
+	return nil
+}
