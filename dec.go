@@ -621,9 +621,13 @@ func (x *Dec) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (z *Dec) UnmarshalJSON(data []byte) error {
-	_, ok := z.SetString(string(data))
+	s := string(data)
+	if strings.HasPrefix(s, "\"") && strings.HasSuffix(s, "\"") {
+		s = s[1 : len(s)-1]
+	}
+	_, ok := z.SetString(s)
 	if !ok {
-		return fmt.Errorf("invalid inf.Dec")
+		return fmt.Errorf("invalid inf.Dec '%s'", s)
 	}
 	return nil
 }
